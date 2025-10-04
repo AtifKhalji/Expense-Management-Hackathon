@@ -6,7 +6,6 @@
     <title>My Expense Reports</title>
     
     <style>
-        /* CSS STYLES */
         body { font-family: sans-serif; padding: 20px; background-color: #f4f4f9; }
         .nav-bar { background-color: #333; padding: 10px 20px; margin-bottom: 20px; display: flex; justify-content: space-between; }
         .nav-bar a { color: white; text-decoration: none; margin-left: 15px; }
@@ -24,7 +23,6 @@
         .btn-edit { background-color: #ffc107; color: #333; }
         .btn-submit { background-color: #28a745; }
 
-        /* Status Styling */
         .status { padding: 4px 8px; border-radius: 12px; font-weight: bold; font-size: 0.9em; }
         .draft { background-color: #e9ecef; color: #6c757d; }
         .pending { background-color: #fff3cd; color: #856404; }
@@ -65,12 +63,10 @@
 </div>
 
 <script>
-    // Utility to get/set reports from Local Storage
     const getSubmittedReports = () => {
         return JSON.parse(localStorage.getItem('submittedReports')) || [];
     };
     
-    // Sample data to ensure a report shows up if localStorage is empty
     const defaultReports = [
         { id: 101, name: "Q3 Client Travel", date: "2025-09-28", amount: 895.50, status: "Approved" },
         { id: 103, name: "Client Lunch - Jones", date: "2025-10-03", amount: 65.20, status: "Draft" },
@@ -80,7 +76,6 @@
     document.addEventListener('DOMContentLoaded', () => {
         let employeeReports = getSubmittedReports();
 
-        // If LocalStorage is empty, use default reports for demo purposes
         if (employeeReports.length === 0) {
             employeeReports = defaultReports;
         }
