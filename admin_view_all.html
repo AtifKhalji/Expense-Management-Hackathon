@@ -6,9 +6,7 @@
     <title>Admin - View All Expenses</title>
     
     <style>
-        /* CSS STYLES */
         body { font-family: sans-serif; padding: 20px; background-color: #f4f4f9; }
-        /* Navigation Bar Styles */
         .nav-bar { background-color: #333; padding: 10px 20px; margin-bottom: 20px; display: flex; justify-content: space-between; }
         .nav-bar a { color: white; text-decoration: none; margin-left: 15px; }
         .nav-bar a:hover { color: #007bff; }
@@ -21,7 +19,6 @@
         th { background-color: #dc3545; color: white; font-weight: 600; }
         tbody tr:hover { background-color: #f1f1f1; }
         
-        /* Buttons and Controls */
         .controls { margin-bottom: 20px; display: flex; gap: 10px; align-items: center; }
         .controls label { font-weight: bold; }
         .controls select { padding: 8px; border-radius: 4px; }
@@ -29,7 +26,6 @@
         .btn-view { background-color: #007bff; }
         .btn-override { background-color: #ffc107; color: #333; }
 
-        /* Status Badges */
         .status { padding: 4px 8px; border-radius: 12px; font-weight: bold; font-size: 0.9em; }
         .draft { background-color: #e9ecef; color: #6c757d; }
         .pending { background-color: #fff3cd; color: #856404; }
@@ -84,12 +80,10 @@
 </div>
 
 <script>
-    // Utility to get/set reports from Local Storage
     const getSubmittedReports = () => {
         return JSON.parse(localStorage.getItem('submittedReports')) || [];
     };
     
-    // Sample data for initial load if nothing is submitted yet
     const defaultReports = [
         { id: 101, employee: "Jane Doe", manager: "Sarah Chen", name: "Q1 Travel", amount: 1450.75, status: "Approved" },
         { id: 102, employee: "Alex Smith", manager: "Sarah Chen", name: "Client Dinner", amount: 189.50, status: "Pending" },
@@ -98,7 +92,6 @@
     ];
 
     document.addEventListener('DOMContentLoaded', () => {
-        // Combine static and local storage reports (Admin sees ALL)
         let allReports = defaultReports.concat(getSubmittedReports());
 
         const tableBody = document.getElementById('expenseTableBody');
@@ -167,15 +160,12 @@
             }
             
             if (action === 'override') {
-                // Simulation of Admin Override
                 const currentStatus = report.status;
                 const newStatus = prompt(`Current Status is ${currentStatus}. Enter new status (e.g., APPROVED or REJECTED):`).toUpperCase();
                 
                 if (newStatus && (newStatus === 'APPROVED' || newStatus === 'REJECTED')) {
-                    // Update the status in the data array
                     report.status = newStatus.charAt(0) + newStatus.slice(1).toLowerCase(); 
                     
-                    // Update Local Storage (Simulation)
                     const reportsLS = getSubmittedReports();
                     const reportIndex = reportsLS.findIndex(r => r.id === reportId);
                     if (reportIndex > -1) {
@@ -183,7 +173,6 @@
                          localStorage.setItem('submittedReports', JSON.stringify(reportsLS));
                     }
                     
-                    // Re-render the table to reflect the change
                     renderTable(statusFilter.value); 
                     alert(`Report ${reportId} status successfully overridden to ${newStatus}!`);
                 } else if (newStatus) {
@@ -192,7 +181,6 @@
             }
         });
 
-        // Initial render
         renderTable('ALL');
     });
 </script>
