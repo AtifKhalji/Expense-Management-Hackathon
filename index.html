@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Expense Manager</title>
+    <style>
+        /* CSS STYLES */
+        body {
+            font-family: sans-serif;
+            background-color: #f4f4f9;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        /* Navigation Bar Styles */
+        .nav-bar { width: 100%; background-color: #333; padding: 10px 20px; margin-bottom: 20px; display: flex; justify-content: space-between; position: fixed; top: 0; left: 0; z-index: 1000; }
+        .nav-bar a { color: white; text-decoration: none; margin-left: 15px; }
+        .nav-bar a:hover { color: #007bff; }
+        .nav-bar .admin-link { color: yellow; }
+
+        .welcome-box {
+            background-color: #ffffff;
+            padding: 40px 60px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            max-width: 600px;
+            margin-top: 100px; /* Space from the fixed nav bar */
+        }
+        h1 {
+            color: #007bff;
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+        p {
+            font-size: 1.2em;
+            color: #555;
+            margin-bottom: 30px;
+        }
+        .cta-button {
+            display: inline-block;
+            padding: 15px 30px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin: 0 10px;
+            transition: background-color 0.2s;
+        }
+        .cta-button.login {
+            background-color: #007bff;
+        }
+        .cta-button:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="nav-bar">
+    <div style="color: white; font-weight: bold; font-size: 1.2em;">Expense Manager 💰</div>
+    <div>
+        <a href="employee_entry.html">New Expense</a>
+        <a href="employee_dashboard.html">My Reports</a>
+        <a href="manager_dashboard.html">Manager Approvals</a>
+        <span style="color: white; margin-left: 10px;">|</span>
+        <a href="admin_user_management.html" class="admin-link">Admin: Users</a>
+        <a href="admin_view_all.html" class="admin-link">Admin: All Expenses</a>
+        <a href="admin_rules_config.html" class="admin-link">Admin: Rules</a>
+    </div>
+</nav>
+<div class="welcome-box">
+    <h1>Manage Your Expenses Smarter.</h1>
+    <p>The streamlined solution for employees, managers, and admins.</p>
+    
+    <div>
+        <a href="login.html" class="cta-button login">Login to Your Account</a>
+        <a href="signup.html" class="cta-button">Register Today</a>
+    </div>
+</div>
+
+</body>
+</html>
