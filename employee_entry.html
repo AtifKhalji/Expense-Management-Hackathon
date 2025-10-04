@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employee Expense Entry (With OCR)</title>
     <style>
-        /* CSS STYLES */
         body { font-family: sans-serif; padding: 20px; background-color: #f4f4f9; }
-        /* Navigation Bar Styles */
         .nav-bar { background-color: #333; padding: 10px 20px; margin-bottom: 20px; display: flex; justify-content: space-between; }
         .nav-bar a { color: white; text-decoration: none; margin-left: 15px; }
         .nav-bar a:hover { color: #007bff; }
@@ -151,7 +149,6 @@
 </div>
 
 <script>
-    // Utility to get/set reports in Local Storage
     const getSubmittedReports = () => {
         return JSON.parse(localStorage.getItem('submittedReports')) || [];
     };
@@ -213,7 +210,6 @@
             updateReportTotal();
         };
         
-        // --- OCR Simulation Function ---
         const simulateOCR = () => {
             const receiptFile = document.getElementById('item-receipt').files[0];
             
@@ -222,7 +218,6 @@
                 return;
             }
 
-            // Simulated OCR Output Data
             const ocrResult = {
                 amount: 45.75,
                 date: "2025-10-04",
@@ -231,7 +226,6 @@
                 description: "Client lunch with Acme team."
             };
 
-            // Auto-populate the form fields
             document.getElementById('item-amount').value = ocrResult.amount.toFixed(2);
             document.getElementById('item-date').value = ocrResult.date;
             document.getElementById('item-description').value = ocrResult.vendor + " - " + ocrResult.description;
@@ -239,7 +233,6 @@
             
             alert(`OCR successful! Expense details for ${ocrResult.vendor} ($${ocrResult.amount.toFixed(2)}) auto-populated.`);
         };
-        // End OCR Simulation
 
         addItemForm.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -293,22 +286,19 @@
                 return;
             }
             
-            // Generate a unique report ID for persistence
             const reportId = Date.now();
             const dateCreated = document.getElementById('report-date').value;
 
-            // Report object to save
             const finalReport = {
                 id: reportId,
                 employee: employeeName,
                 name: reportName,
                 date: dateCreated,
                 amount: totalAmount,
-                status: "Pending", // Always Pending upon submission
+                status: "Pending", 
                 items: expenseItems
             };
 
-            // Save to Local Storage (making it available for Manager Dashboard)
             saveSubmittedReport(finalReport);
 
             alert(`
@@ -321,7 +311,6 @@ Items: ${expenseItems.length}
 This report is now visible on the Manager's Approval Dashboard.
             `);
 
-            // Reset form and items
             document.getElementById('reportHeaderForm').reset();
             expenseItems = [];
             renderItemsTable();
