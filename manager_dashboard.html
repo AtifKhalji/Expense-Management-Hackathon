@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Dashboard - Expense Approval</title>
+    
+    <style>
+        /* CSS STYLES */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+        body { background-color: #f4f4f9; padding: 20px; }
+        
+        /* Navigation Bar Styles */
+        .nav-bar { background-color: #333; padding: 10px 20px; margin-bottom: 20px; display: flex; justify-content: space-between; }
+        .nav-bar a { color: white; text-decoration: none; margin-left: 15px; }
+        .nav-bar a:hover { color: #007bff; }
+        .nav-bar .admin-link { color: yellow; }
+
+        .page-container { max-width: 1200px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; padding: 20px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+        h1 { margin-bottom: 20px; color: #007bff; }
+
+        /* Table Styling */
+        #expense-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        #expense-table th, #expense-table td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #ddd; }
+        #expense-table th { background-color: #007bff; color: white; font-weight: 600; }
+        #expense-table tbody tr:hover { background-color: #f1f1f1; }
+
+        /* Action Button Styling */
+        .action-btn { padding: 6px 10px; margin-right: 5px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9em; transition: background-color 0.2s; }
+        .view-btn { background-color: #007bff; color: white; }
+        .approve-btn { background-color: #28a745; color: white; }
+        .reject-btn { background-color: #dc3545; color: white; }
+
+        /* Status Badges */
+        .status { padding: 4px 8px; border-radius: 12px; font-weight: bold; font-size: 0.85em; }
+        .pending { background-color: #fff3cd; color: #856404; }
+        .processed-message { font-weight: bold; color: #6c757d; }
+    </style>
+</head>
+<body>
+
+<nav class="nav-bar">
+    <div style="color: white; font-weight: bold; font-size: 1.2em;">Expense Manager 💰</div>
+    <div>
+        <a href="employee_entry.html">New Expense</a>
+        <a href="employee_dashboard.html">My Reports</a>
+        <a href="manager_dashboard.html">Manager Approvals</a>
+        <span style="color: white; margin-left: 10px;">|</span>
+        <a href="admin_user_management.html" class="admin-link">Admin: Users</a>
+        <a href="admin_view_all.html" class="admin-link">Admin: All Expenses</a>
+        <a href="admin_rules_config.html" class="admin-link">Admin: Rules</a>
+    </div>
+</nav>
+<div class="page-container">
+    <h1>Expense Approval Overview (Pending Reports)</h1>
+
+    <table id="expense-table">
+        <thead>
+            <tr>
+                <th>Employee</th>
+                <th>Report Name / Category</th>
+                <th>Request Details</th>
+                <th>Total Amount (USD)</th>
+                <th>Actions</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody id="expenseTableBody">
+            </tbody>
+    </table>
+</div>
+
+<script>
+    // Utility to get/set reports in Local Storage
+    const getSubmittedReports = () => {
+        return JSON.parse(localStorage.getItem('submittedReports')) || [];
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Sample static data for initial load if nothing is submitted yet
+        const defaultReports = [
+            { id: 1, employee: "Jane Doe", category: "Travel Report Q1", amount: 1450.75, status: "Pending", details: "Flight and hotel for NYC conference." },
+            { id: 2, employee: "Alex Smith", category: "Client Dinner", amount: 189.50, status: "Pending", details: "Dinner with Acme Corp team." },
+            { id: 3, employee: "Mike Johnson", category: "Software Subscription", amount: 49.99, status: "Pending", details: "Monthly Figma subscription." }
+        ]; 
+
+        let expenseData = getSubmittedReports().filter(r => r.status === 'Pending');
+
+        // Use static data if no pending reports are in LocalStorage
+        if (expenseData.length === 0) {
+             expenseData = defaultReports;
+        }
+
+        const tableBody = document.getElementById('expenseTableBody');
+
+        const renderTable = () => {
+            tableBody.innerHTML = ''; 
+
+            if (expenseData.length === 0) {
+                const emptyRow = document.createElement('tr');
+                emptyRow.innerHTML = `<td colspan="6" style="text-align: center; color: #999; font-style: italic;">
+                    No expense reports are currently pending approval.
+                </td>`;
+                tableBody.appendChild(emptyRow);
+                return;
+            }
+
+            expenseData.forEach(expense => {
+                const row = document.createElement('tr');
+                row.dataset.expenseId = expense.id;
+
+                row.innerHTML = `
+                    <td>${expense.employee}</td>
+                    <td>${expense.category}</td>
+                    <td>${expense.details}</td>
+                    <td>$${expense.amount.toFixed(2)}</td>
+                    <td>
+                        <button class="action-btn view-btn" data-action="view">View</button>
+                        <button class="action-btn approve-btn" data-action="approve">Approve</button>
+                        <button class="action-btn reject-btn" data-action="reject">Reject</button>
+                    </td>
+                    <td><span class="status ${expense.status.toLowerCase()}">${expense.status}</span></td>
+                `;
+                tableBody.appendChild(row);
+            });
+        };
+
+        const handleAction = (event) => {
+            const button = event.target;
+            if (!button.classList.contains('action-btn')) return;
+
+            const row = button.closest('tr');
+            const actionType = button.dataset.action; 
+            const expenseId = parseInt(row.dataset.expenseId);
+
+            if (actionType === 'view') {
+                alert(`VIEW DETAILS for Report ID ${expenseId}:\nThis would open a modal showing all detailed line items.`);
+                return;
+            }
+
+            const newStatus = actionType === 'approve' ? 'Approved' : 'Rejected';
+            
+            // ESCALATION/REASON LOGIC for Reject
+            if (actionType === 'reject') {
+                const reason = prompt(`Reason for REJECTING ${row.querySelector('td:nth-child(2)').textContent} (Escalation):`);
+                if (!reason || reason.trim() === '') {
+                    alert('Rejection requires a reason. Action cancelled.');
+                    return;
+                }
+                alert(`Report rejected. Reason logged: ${reason}`);
+            }
+
+            // 1. Visually update the status cell
+            const statusCell = row.querySelector('.status');
+            statusCell.textContent = newStatus;
+            statusCell.className = `status ${newStatus.toLowerCase()}`;
+
+            // 2. Remove the action buttons
+            const actionCell = button.closest('td');
+            actionCell.innerHTML = `<span class="processed-message">${newStatus.toUpperCase()}</span>`;
+
+            // 3. Update Local Storage (Simulation)
+            const allReports = getSubmittedReports();
+            const reportIndex = allReports.findIndex(r => r.id === expenseId);
+            if (reportIndex > -1) {
+                allReports[reportIndex].status = newStatus;
+                localStorage.setItem('submittedReports', JSON.stringify(allReports));
+            }
+
+            // 4. Remove the row from the display (and array for cleaner demo)
+            setTimeout(() => {
+                row.remove();
+                
+                // Remove from the temporary array
+                const arrayIndex = expenseData.findIndex(item => item.id === expenseId);
+                if (arrayIndex > -1) {
+                    expenseData.splice(arrayIndex, 1);
+                }
+                
+                // Re-render the table to show the "empty" message if needed
+                if (tableBody.children.length === 0) {
+                     renderTable(); 
+                }
+            }, 1500); 
+        };
+
+        tableBody.addEventListener('click', handleAction);
+        renderTable();
+    });
+</script>
+</body>
+</html>
