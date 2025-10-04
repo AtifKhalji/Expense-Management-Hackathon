@@ -6,9 +6,7 @@
     <title>Admin - Configure Approval Rules</title>
     
     <style>
-        /* CSS STYLES */
         body { font-family: sans-serif; padding: 20px; background-color: #f4f4f9; }
-        /* Navigation Bar Styles */
         .nav-bar { background-color: #333; padding: 10px 20px; margin-bottom: 20px; display: flex; justify-content: space-between; }
         .nav-bar a { color: white; text-decoration: none; margin-left: 15px; }
         .nav-bar a:hover { color: #007bff; }
@@ -31,7 +29,6 @@
         .btn-save { background-color: #28a745; margin-top: 20px; }
         .btn-save:hover { background-color: #218838; }
 
-        /* Notification Styling */
         #notification {
             background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb;
             padding: 10px; margin-top: 20px; border-radius: 4px; display: none;
@@ -124,7 +121,6 @@
         const form = document.getElementById('rulesForm');
         const notification = document.getElementById('notification');
 
-        // Load rules from localStorage on page load (if available)
         const loadRules = () => {
             const savedRules = JSON.parse(localStorage.getItem('approvalRules'));
             if (savedRules) {
@@ -140,7 +136,6 @@
         const saveRules = (e) => {
             e.preventDefault();
 
-            // 1. Collect all rule data
             const rules = {
                 generalLimit: document.getElementById('limit-amount').value,
                 escalationRole: document.getElementById('escalation-role').value,
@@ -150,21 +145,18 @@
                 blockAction: document.getElementById('block-action').value,
             };
 
-            // 2. Save to Local Storage
             localStorage.setItem('approvalRules', JSON.stringify(rules));
             
-            // 3. Show notification
             notification.textContent = `SUCCESS! Approval rules saved. General limit set to USD ${rules.generalLimit}, escalating to ${rules.escalationRole}.`;
             notification.style.display = 'block';
 
-            // Hide notification after 3 seconds
             setTimeout(() => {
                 notification.style.display = 'none';
             }, 3000);
         };
 
         form.addEventListener('submit', saveRules);
-        loadRules(); // Load rules on page start
+        loadRules(); 
     });
 </script>
 
